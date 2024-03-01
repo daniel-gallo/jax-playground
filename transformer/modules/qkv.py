@@ -12,7 +12,6 @@ class QKVModule(nn.Module):
 
     @nn.compact
     def __call__(self, x):
-        # X is (bs, in_features)
         w_q = self.param(
             "w_q",
             self.init_function,

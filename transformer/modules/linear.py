@@ -5,8 +5,7 @@ from flax import linen as nn
 
 
 class Linear(nn.Module):
-    in_features: int
-    out_features: int
+    features: int
 
     # The init functions should be like `lambda key, shape: jnp.random.normal(key, shape)`
     kernel_init: Callable = nn.initializers.he_normal()
@@ -14,15 +13,17 @@ class Linear(nn.Module):
 
     @nn.compact
     def __call__(self, x):
+        in_features = x.shape[-1]
+
         kernel = self.param(
             "kernel",
             self.kernel_init,
-            (self.in_features, self.out_features)
+            (in_features, self.features)
         )
         bias = self.param(
             "bias",
             nn.initializers.zeros_init(),
-            (self.out_features,)
+            (self.features,)
         )
 
         return jnp.dot(x, kernel) + bias
